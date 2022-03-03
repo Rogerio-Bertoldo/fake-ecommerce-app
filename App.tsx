@@ -1,22 +1,28 @@
 import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { useCartContext } from "./src/adapters/store";
+import { ProductApi } from "./src/adapters/api";
+import { useCartContext, useUserContext } from "./src/adapters/store";
 import { StoreProvider } from "./src/adapters/store";
+import { User } from "./src/domain/user";
+import { Router } from "./src/ui/router";
 
 export function App() {
   const cartStore = useCartContext();
-  cartStore.actions.getFromCache("sample-user-id").then((res: any) => console.log("CACHE: ", res))
+  const userStore = useUserContext();
+  cartStore.actions
+    .getFromCache("rogerio@gmail.com")
+    .then((res: any) => console.log("CACHE: ", res));
+  let user = new User("mor_2314", "rogerio@gmail.com", "John", "Doe");
   useEffect(() => {
     console.log("START_AQUI...");
-    fetch("https://fakestoreapi.com/products")
-      .then((response) => response.json())
-      .then((products) => {
-        cartStore.actions.addToCart("sample-user-id",products[0]);
-        cartStore.actions.addToCart("sample-user-id",products[1]);
+    userStore.actions
+      .login(user, "83r5^_")
+      .then(async (r: any) => {
+        console.log("AUTH-EMAIL: ", r.email);
+        return Promise.resolve(r);
       })
-      .catch((error) => console.log("ERRO aqui: ", error))
-      .finally(() => console.log("CART_AQUI: ", cartStore.data.cart));
+      .catch((error: any) => console.log("ERRO_AUTH: ", error));
   }, []);
 
   return (
@@ -27,10 +33,11 @@ export function App() {
   );
 }
 
-export default () => {
+export default () => {  
   return (
     <StoreProvider>
-      <App />
+      {/* <App /> */}
+      <Router />
     </StoreProvider>
   );
 };

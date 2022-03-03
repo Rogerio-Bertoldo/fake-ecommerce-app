@@ -1,42 +1,39 @@
 import React from "react";
-// import { StoreContext } from ".";
 import { Cart } from "../../domain/cart";
 import { decreaseAmount, increaseAmount, Product } from "../../domain/product";
 import { getData, storeData } from "../storage";
 
-// export const useCartContext = () => {
-//   const store = React.useContext(StoreContext);
-//   return store.cart;
-// };
 
 export const __useCartData = () => {
   const [cart, setCart] = React.useState(new Cart([]));
 
-  const addToCart = (userId: string, product: Product) => {
+  const keyStore = (key: string) => `cart-${key}`
+
+  const addToCart = (userEmail: string, product: Product) => {
     cart.add(product);
     setCart(cart);
-    storeData(userId, cart)
+    storeData(keyStore(userEmail), cart)
       .then(() => increaseAmount(product))
       .catch((error) => new Error(error));
   };
 
-  const removeFromCart = async (userId: string, product: Product) => {
+  const removeFromCart = async (userEmail: string, product: Product) => {
     cart.remove(product);
     setCart(cart);
-    storeData(userId, cart)
+    storeData(keyStore(userEmail), cart)
       .then(() => decreaseAmount(product))
       .catch((error) => new Error(error));
   };
 
-  const clearCart = (userId: string) => {
+  const clearCart = (userEmail: string) => {
     cart.clear();
     setCart(new Cart([]));
-    storeData(userId, cart);
+    storeData(keyStore(userEmail), cart);
   };
 
-  const getFromCache = async (userId: string) => {
+  const getFromCache = async (userEmail: string) => {
     return new Promise((resolve, reject) => {
-      getData(userId).then(resolve).catch(reject);
+      getData(keyStore(userEmail)).then(resolve).catch(reject);
     });
   };
 
