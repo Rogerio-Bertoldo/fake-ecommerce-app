@@ -17,6 +17,7 @@ type Address = {
 };
 
 export class User {
+  private _id: string;
   private _userName: string;
   private _email: string;
   private _name: UserName;
@@ -27,11 +28,16 @@ export class User {
     userName: string,
     email: string,
     firstName: string,
-    lastName: string,
+    lastName: string
   ) {
     this._userName = userName;
     this._email = email;
+
+    //For now, we're gonna use the email as user id
+    this._id = email;
     this._name = { firstName, lastName };
+
+    //No need of these parameters for this sample project, but we need them to build the api request body
     this._address = {
       city: null,
       geolocation: { lat: null, long: null },
@@ -44,6 +50,10 @@ export class User {
 
   public get userName() {
     return this._userName;
+  }
+
+  public get id() {
+    return this._id;
   }
 
   public get email() {

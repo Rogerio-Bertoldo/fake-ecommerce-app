@@ -1,29 +1,36 @@
 import { Product } from "./product";
+import { User } from "./user";
 
 export class Cart {
+  private _userId: string;
   private _products: Product[];
 
-  constructor(products: Product[]) {
+  constructor(user: User, products: Product[]) {
     this._products = products;
+    this._userId = user.id
+  }
+
+  public get userId() {
+    return this._userId;
   }
 
   public get products() {
     return this._products;
   }
 
-  getTotalPrice(): number {
+  public getTotalPrice(): number {
     return this._products.reduce((total, { price }) => total + price, 0);
   }
 
-  add(product: Product) {
+  public add(product: Product) {
     this._products.push(product);
   }
 
-  remove(product: Product) {
+  public remove(product: Product) {
     this._products = [...this._products.filter((p) => p.id !== product.id)];
   }
 
-  clear() {
+  public clear() {
     this._products = [];
   }
 }

@@ -14,17 +14,24 @@ export type Product = {
   amount?: number;
 };
 
-export function increaseAmount(product: Product, increment: number = 1): Product {
+export function increaseAmount(
+  product: Product,
+  increment: number = 1
+): Product {
   product.amount = product.amount ? product.amount + increment : increment;
-  return product
+  return product;
 }
 
-export function decreaseAmount(product: Product, decrement: number = 1): Product {
-  product.amount = (product.amount && product.amount > 0) ? product.amount - decrement : 0;
-  return product
+export function decreaseAmount(
+  product: Product,
+  decrement: number = 1
+): Product {
+  product.amount =
+    product.amount && product.amount > 0 ? product.amount - decrement : 0;
+  return product;
 }
 
 export function resetAmount(product: Product): Product {
-  product.amount = undefined
-  return product
+  product.amount = undefined;
+  return product;
 }
